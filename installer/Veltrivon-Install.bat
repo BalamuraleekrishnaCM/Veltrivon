@@ -20,10 +20,12 @@ echo Veltrivon Windows Control Suite - third-party application installer
  echo 2. Install essential workstation tools
  echo 3. Install extended diagnostic and developer tools
  echo 4. Install XR and media tools
- echo 5. Install all essential, extended and XR tools
+ echo 5. Install all installation profiles
  echo 6. Review optional or conflicting apps and official links
  echo 7. Exit
-choice /c 1234567 /n /m "Select [1-7]: "
+ echo 8. Install essential developer tools
+ echo 9. Install open-source-first XR tools
+choice /c 123456789 /n /m "Select [1-9]: "
 set "PICK=%ERRORLEVEL%"
 if "%PICK%"=="7" exit /b 0
 if "%PICK%"=="6" goto optional
@@ -77,9 +79,11 @@ if "%PICK%"=="5" call :pkg "DevToys" "DevToys-app.DevToys" "https://devtoys.app/
 if "%PICK%"=="1" call :pkg "Windows Terminal" "Microsoft.WindowsTerminal" "https://github.com/microsoft/terminal"
 if "%PICK%"=="2" call :pkg "Windows Terminal" "Microsoft.WindowsTerminal" "https://github.com/microsoft/terminal"
 if "%PICK%"=="5" call :pkg "Windows Terminal" "Microsoft.WindowsTerminal" "https://github.com/microsoft/terminal"
+if "%PICK%"=="8" call :pkg "Windows Terminal" "Microsoft.WindowsTerminal" "https://github.com/microsoft/terminal"
 if "%PICK%"=="1" call :pkg "PowerShell 7" "Microsoft.PowerShell" "https://github.com/PowerShell/PowerShell"
 if "%PICK%"=="2" call :pkg "PowerShell 7" "Microsoft.PowerShell" "https://github.com/PowerShell/PowerShell"
 if "%PICK%"=="5" call :pkg "PowerShell 7" "Microsoft.PowerShell" "https://github.com/PowerShell/PowerShell"
+if "%PICK%"=="8" call :pkg "PowerShell 7" "Microsoft.PowerShell" "https://github.com/PowerShell/PowerShell"
 if "%PICK%"=="1" call :pkg "Bitwarden" "Bitwarden.Bitwarden" "https://bitwarden.com/download/"
 if "%PICK%"=="2" call :pkg "Bitwarden" "Bitwarden.Bitwarden" "https://bitwarden.com/download/"
 if "%PICK%"=="5" call :pkg "Bitwarden" "Bitwarden.Bitwarden" "https://bitwarden.com/download/"
@@ -154,6 +158,7 @@ if "%PICK%"=="3" call :pkg "WinDbg" "Microsoft.WinDbg" "https://learn.microsoft.
 if "%PICK%"=="5" call :pkg "WinDbg" "Microsoft.WinDbg" "https://learn.microsoft.com/windows-hardware/drivers/debugger/"
 if "%PICK%"=="1" call :pkg "RenderDoc" "RenderDoc.RenderDoc" "https://renderdoc.org/"
 if "%PICK%"=="4" call :pkg "RenderDoc" "RenderDoc.RenderDoc" "https://renderdoc.org/"
+if "%PICK%"=="9" call :pkg "RenderDoc" "RenderDoc.RenderDoc" "https://renderdoc.org/"
 if "%PICK%"=="5" call :pkg "RenderDoc" "RenderDoc.RenderDoc" "https://renderdoc.org/"
 if "%PICK%"=="1" call :pkg "PIX" "Microsoft.PIX" "https://devblogs.microsoft.com/pix/"
 if "%PICK%"=="4" call :pkg "PIX" "Microsoft.PIX" "https://devblogs.microsoft.com/pix/"
@@ -161,9 +166,11 @@ if "%PICK%"=="5" call :pkg "PIX" "Microsoft.PIX" "https://devblogs.microsoft.com
 if "%PICK%"=="1" call :pkg "ADB Platform Tools" "Google.PlatformTools" "https://developer.android.com/tools/releases/platform-tools"
 if "%PICK%"=="4" call :pkg "ADB Platform Tools" "Google.PlatformTools" "https://developer.android.com/tools/releases/platform-tools"
 if "%PICK%"=="5" call :pkg "ADB Platform Tools" "Google.PlatformTools" "https://developer.android.com/tools/releases/platform-tools"
+if "%PICK%"=="9" call :pkg "ADB Platform Tools" "Google.PlatformTools" "https://developer.android.com/tools/releases/platform-tools"
 if "%PICK%"=="1" call :pkg "scrcpy" "Genymobile.scrcpy" "https://github.com/Genymobile/scrcpy"
 if "%PICK%"=="4" call :pkg "scrcpy" "Genymobile.scrcpy" "https://github.com/Genymobile/scrcpy"
 if "%PICK%"=="5" call :pkg "scrcpy" "Genymobile.scrcpy" "https://github.com/Genymobile/scrcpy"
+if "%PICK%"=="9" call :pkg "scrcpy" "Genymobile.scrcpy" "https://github.com/Genymobile/scrcpy"
 if "%PICK%"=="1" call :pkg "FFmpeg" "Gyan.FFmpeg" "https://ffmpeg.org/"
 if "%PICK%"=="4" call :pkg "FFmpeg" "Gyan.FFmpeg" "https://ffmpeg.org/"
 if "%PICK%"=="5" call :pkg "FFmpeg" "Gyan.FFmpeg" "https://ffmpeg.org/"
@@ -173,12 +180,15 @@ if "%PICK%"=="5" call :pkg "MediaInfo" "MediaArea.MediaInfo.GUI" "https://mediaa
 if "%PICK%"=="1" call :pkg "OBS Studio" "OBSProject.OBSStudio" "https://obsproject.com/"
 if "%PICK%"=="4" call :pkg "OBS Studio" "OBSProject.OBSStudio" "https://obsproject.com/"
 if "%PICK%"=="5" call :pkg "OBS Studio" "OBSProject.OBSStudio" "https://obsproject.com/"
+if "%PICK%"=="9" call :pkg "OBS Studio" "OBSProject.OBSStudio" "https://obsproject.com/"
 if "%PICK%"=="1" call :pkg "Apktool" "iBotPeaches.Apktool" "https://apktool.org/"
 if "%PICK%"=="4" call :pkg "Apktool" "iBotPeaches.Apktool" "https://apktool.org/"
 if "%PICK%"=="5" call :pkg "Apktool" "iBotPeaches.Apktool" "https://apktool.org/"
 if "%PICK%"=="1" call :pkg "Git" "Git.Git" "https://git-scm.com/"
 if "%PICK%"=="4" call :pkg "Git" "Git.Git" "https://git-scm.com/"
 if "%PICK%"=="5" call :pkg "Git" "Git.Git" "https://git-scm.com/"
+if "%PICK%"=="8" call :pkg "Git" "Git.Git" "https://git-scm.com/"
+if "%PICK%"=="9" call :pkg "Git" "Git.Git" "https://git-scm.com/"
 if "%PICK%"=="1" call :pkg "Malwarebytes Free" "Malwarebytes.Malwarebytes" "https://www.malwarebytes.com/"
 if "%PICK%"=="1" call :pkg "AdwCleaner" "Malwarebytes.AdwCleaner" "https://www.malwarebytes.com/adwcleaner"
 if "%PICK%"=="1" call :pkg "Advanced SystemCare" "IObit.AdvancedSystemCare" "https://www.iobit.com/en/advancedsystemcarefree.php"
@@ -191,6 +201,48 @@ if "%PICK%"=="1" call :pkg "Portmaster" "Safing.Portmaster" "https://safing.io/"
 if "%PICK%"=="1" call :pkg "Simplewall" "Henry++.simplewall" "https://github.com/henrypp/simplewall"
 if "%PICK%"=="1" call :pkg "VeraCrypt" "IDRIX.VeraCrypt" "https://veracrypt.fr/"
 if "%PICK%"=="1" call :pkg "Sandboxie Plus" "Sandboxie.Plus" "https://sandboxie-plus.com/"
+if "%PICK%"=="1" call :pkg "VSCodium" "VSCodium.VSCodium" "https://github.com/VSCodium/vscodium"
+if "%PICK%"=="8" call :pkg "VSCodium" "VSCodium.VSCodium" "https://github.com/VSCodium/vscodium"
+if "%PICK%"=="5" call :pkg "VSCodium" "VSCodium.VSCodium" "https://github.com/VSCodium/vscodium"
+if "%PICK%"=="1" call :pkg "Go" "GoLang.Go" "https://go.dev/"
+if "%PICK%"=="8" call :pkg "Go" "GoLang.Go" "https://go.dev/"
+if "%PICK%"=="5" call :pkg "Go" "GoLang.Go" "https://go.dev/"
+if "%PICK%"=="1" call :pkg ".NET 10 SDK" "Microsoft.DotNet.SDK.10" "https://dotnet.microsoft.com/download/dotnet/10.0"
+if "%PICK%"=="8" call :pkg ".NET 10 SDK" "Microsoft.DotNet.SDK.10" "https://dotnet.microsoft.com/download/dotnet/10.0"
+if "%PICK%"=="5" call :pkg ".NET 10 SDK" "Microsoft.DotNet.SDK.10" "https://dotnet.microsoft.com/download/dotnet/10.0"
+if "%PICK%"=="1" call :pkg "Node.js LTS" "OpenJS.NodeJS.LTS" "https://nodejs.org/"
+if "%PICK%"=="8" call :pkg "Node.js LTS" "OpenJS.NodeJS.LTS" "https://nodejs.org/"
+if "%PICK%"=="5" call :pkg "Node.js LTS" "OpenJS.NodeJS.LTS" "https://nodejs.org/"
+if "%PICK%"=="1" call :pkg "Python 3.14" "Python.Python.3.14" "https://www.python.org/"
+if "%PICK%"=="8" call :pkg "Python 3.14" "Python.Python.3.14" "https://www.python.org/"
+if "%PICK%"=="5" call :pkg "Python 3.14" "Python.Python.3.14" "https://www.python.org/"
+if "%PICK%"=="1" call :pkg "Eclipse Temurin 21 JDK" "EclipseAdoptium.Temurin.21.JDK" "https://adoptium.net/"
+if "%PICK%"=="8" call :pkg "Eclipse Temurin 21 JDK" "EclipseAdoptium.Temurin.21.JDK" "https://adoptium.net/"
+if "%PICK%"=="5" call :pkg "Eclipse Temurin 21 JDK" "EclipseAdoptium.Temurin.21.JDK" "https://adoptium.net/"
+if "%PICK%"=="1" call :pkg "CMake" "Kitware.CMake" "https://cmake.org/"
+if "%PICK%"=="8" call :pkg "CMake" "Kitware.CMake" "https://cmake.org/"
+if "%PICK%"=="5" call :pkg "CMake" "Kitware.CMake" "https://cmake.org/"
+if "%PICK%"=="1" call :pkg "Ninja" "Ninja-build.Ninja" "https://ninja-build.org/"
+if "%PICK%"=="8" call :pkg "Ninja" "Ninja-build.Ninja" "https://ninja-build.org/"
+if "%PICK%"=="5" call :pkg "Ninja" "Ninja-build.Ninja" "https://ninja-build.org/"
+if "%PICK%"=="1" call :pkg "LLVM" "LLVM.LLVM" "https://llvm.org/"
+if "%PICK%"=="8" call :pkg "LLVM" "LLVM.LLVM" "https://llvm.org/"
+if "%PICK%"=="5" call :pkg "LLVM" "LLVM.LLVM" "https://llvm.org/"
+if "%PICK%"=="1" call :pkg "GitHub CLI" "GitHub.cli" "https://cli.github.com/"
+if "%PICK%"=="8" call :pkg "GitHub CLI" "GitHub.cli" "https://cli.github.com/"
+if "%PICK%"=="5" call :pkg "GitHub CLI" "GitHub.cli" "https://cli.github.com/"
+if "%PICK%"=="1" call :pkg "ripgrep" "BurntSushi.ripgrep.MSVC" "https://github.com/BurntSushi/ripgrep"
+if "%PICK%"=="8" call :pkg "ripgrep" "BurntSushi.ripgrep.MSVC" "https://github.com/BurntSushi/ripgrep"
+if "%PICK%"=="5" call :pkg "ripgrep" "BurntSushi.ripgrep.MSVC" "https://github.com/BurntSushi/ripgrep"
+if "%PICK%"=="1" call :pkg "jq" "jqlang.jq" "https://jqlang.org/"
+if "%PICK%"=="8" call :pkg "jq" "jqlang.jq" "https://jqlang.org/"
+if "%PICK%"=="5" call :pkg "jq" "jqlang.jq" "https://jqlang.org/"
+if "%PICK%"=="1" call :pkg "Godot" "GodotEngine.GodotEngine" "https://godotengine.org/"
+if "%PICK%"=="9" call :pkg "Godot" "GodotEngine.GodotEngine" "https://godotengine.org/"
+if "%PICK%"=="5" call :pkg "Godot" "GodotEngine.GodotEngine" "https://godotengine.org/"
+if "%PICK%"=="1" call :pkg "Blender" "BlenderFoundation.Blender" "https://www.blender.org/"
+if "%PICK%"=="9" call :pkg "Blender" "BlenderFoundation.Blender" "https://www.blender.org/"
+if "%PICK%"=="5" call :pkg "Blender" "BlenderFoundation.Blender" "https://www.blender.org/"
 echo.
 echo Completed. Successful or already installed: %OK% ; unresolved or failed: %FAIL%
 echo Log: "%LOG%"
@@ -220,6 +272,7 @@ echo Windows Performance Toolkit - https://learn.microsoft.com/windows-hardware/
 echo GPUView - https://learn.microsoft.com/en-us/windows-hardware/drivers/display/using-gpuview
 echo NVIDIA Nsight - https://developer.nvidia.com/tools-downloads
 echo Meta Quest Developer Hub - https://developers.meta.com/vr/downloads/package/oculus-developer-hub-win/
+echo ALVR - https://github.com/alvr-org/ALVR
 echo OVR Metrics Tool - https://developers.meta.com/vr/resources/developer-tools/
 echo Microsoft Defender is built into supported Windows versions. Do not run competing real-time antivirus products.
 pause

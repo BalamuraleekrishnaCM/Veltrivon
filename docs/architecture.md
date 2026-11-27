@@ -1,7 +1,16 @@
 # Architecture — Veltrivon v0.1
 
-## Technology decision
-Windows 11 x64 initially; .NET 10 LTS and WinUI 3 / Windows App SDK for desktop UI, MVVM, dependency injection, async streams, SQLite for local history, JSON for settings. Windows 10/ARM64 only after compatibility verification. Use supported Windows APIs first; optional CLI adapters for external tools. The Go installer is independent of the future desktop application. No permanent elevated process by default.
+## Implemented components
+
+- **Veltrivon desktop** uses .NET 10 and WinUI 3 for catalog browsing, selected WinGet installations, app launching, and read-only diagnostics. The catalog is an embedded copy of `installer/catalog.json`.
+- **Utility installer** offers workstation, developer, and XR profiles through the Windows batch entry point or standalone Go executable. The Go executable embeds the catalog. Batch package rows mirror its exact WinGet IDs. Each catalog record carries a primary profile and optional additional memberships, so installing all profiles processes shared tools once.
+- **XR Dev Manager** is a separate MIT-licensed .NET 10 CLI. It invokes ADB and scrcpy for headset operations, reads the Windows OpenXR registration, and starts an explicitly selected PC VR launcher. ALVR provides streaming and is available through the catalog's manual setup links.
+
+Developer and XR profiles favor open-source upstream tools. The installer resolves package identities and displays publisher links for packages that need separate setup. Dependency installation and device operations run as the current user, with elevation requested by individual installers when required.
+
+## Planned workstation architecture
+
+The diagram describes the target architecture for expanded diagnostics, persistence, package providers, and elevated operations. Windows 11 x64 is the initial desktop target.
 
 ```mermaid
 flowchart TD

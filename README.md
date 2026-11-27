@@ -1,13 +1,28 @@
 # Veltrivon — Windows Control Suite
 Diagnose. Optimize. Protect. Develop.
 
-Local-first, modular Windows workstation suite for PC maintenance, security posture, system diagnostics and development. Status: product specification and installer prototype (v0.1.0), not a finished desktop suite.
+Local-first, modular Windows workstation suite for PC maintenance, security posture, system diagnostics and development. The first desktop build provides a tool catalog, package installation, app launching, and read-only diagnostics.
 
 ## Start here
 - [Architecture](docs/architecture.md)
 - [Feature inventory and roadmap](docs/features.md)
 - [UI layout](docs/layout.md)
 - [Installer catalog](installer/catalog.json)
+- [XR Dev Manager](xr-dev-manager/README.md)
+
+## Windows desktop app
+
+Open `artifacts\Veltrivon.App.exe` on Windows 11 x64. Use **Tool catalog** to filter by profile, select tools, check WinGet availability, and review an installation before accepting package agreements. Use **Run tool** to open an installed app. If its name differs from the catalog or it has no Start menu entry, choose its executable. ADB device inventory, Git version, and FFmpeg version display their results in **Activity**.
+
+Optional and manual profiles provide publisher download links. **Diagnostics** shows workstation inventory and runs read-only checks for disk health, recent system errors, and startup entries. **Run smart scan** runs all checks with a cancel option. **Activity** can export a summary with check names and statuses. Full results remain available in Activity and under `%LOCALAPPDATA%\Veltrivon\Jobs`, where logs can contain Windows event details and local paths.
+
+To publish the desktop app from source, use the .NET 10 SDK on Windows:
+
+```powershell
+dotnet publish src/Veltrivon.App/Veltrivon.App.csproj -c Release -p:DebugType=embedded -o artifacts
+```
+
+Keep the published files together in the artifacts folder. The desktop executable and third-party installers are separate. Microsoft App Installer supplies WinGet, and package operations use the WinGet community source.
 
 ## Utility installer
 Run `installer/Veltrivon-Install.bat` on Windows 11 with App Installer/WinGet and internet. Or build the standalone console EXE:
@@ -17,7 +32,9 @@ cd installer
 go build -trimpath -ldflags="-s -w" -o Veltrivon-Install.exe .
 ```
 
-Choose search-only first, or choose essential, extended, XR/media, or all three installation profiles. Optional/conflicting and manual tools are listed separately with official download links. Package IDs are candidates checked at runtime; missing packages are reported, never replaced with a fuzzy match. Some installers need user interaction, elevation, additional license acceptance, or a restart. No third-party executables are bundled. No cleaning, security configuration or system tuning is performed. The search-only mode updates/query WinGet sources but installs no applications. Log files are stored under `%LOCALAPPDATA%\Veltrivon\Installer` (or temporary directory). WinGet and network access are required; other package-provider adapters are a planned product feature, not implemented in this installer.
+Choose **8** for developer essentials or **9** for the open-source-first XR toolchain. Developer essentials include Git, VSCodium, Go, .NET, Node.js LTS, Python, Temurin JDK, CMake, Ninja, LLVM, GitHub CLI, ripgrep, jq, PowerShell, and Windows Terminal. The XR toolchain adds Android Platform Tools, scrcpy, RenderDoc, OBS Studio, Godot, and Blender. Choose **5** for all installation profiles or **6** for manual and optional tools, including ALVR.
+
+The installer resolves exact package IDs against the WinGet community source and reports unavailable packages with publisher links. Individual installers may require elevation, interaction, or a restart. Search-only mode updates and queries the WinGet source. Logs are stored under `%LOCALAPPDATA%\Veltrivon\Installer` or the temporary directory.
 
 ## Status and safety
-The standalone installer is unsigned and has not been run on Windows. Verify catalog IDs and publisher information before installing. The desktop app is not implemented. Trademark rights are not implied. Third-party applications retain their own licenses; integration does not grant redistribution rights.
+The standalone installer is unsigned. Both installer menus passed an exit-only smoke test on Windows. Live package installation and publisher verification are pending. Third-party applications retain their own licenses.

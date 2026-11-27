@@ -6,15 +6,24 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
+          check-latest: true
       - run: dotnet build src/Veltrivon.Core/Veltrivon.Core.csproj -c Release
-      - uses: actions/setup-go@v5
+      - run: dotnet build src/Veltrivon.App/Veltrivon.App.csproj -c Release
+      - run: dotnet build xr-dev-manager/XrDevManager.csproj -c Release
+      - run: dotnet run --project xr-dev-manager/XrDevManager.csproj -c Release --no-build -- --help
+      - uses: actions/setup-go@v7
         with:
-          go-version: '1.23.x'
+          go-version: 'stable'
+          check-latest: true
+          cache-dependency-path: installer/go.mod
       - run: go test ./...
         working-directory: installer
       - run: go build -trimpath -o Veltrivon-Install.exe .
+        working-directory: installer
+      - run: |
+          '7' | .\Veltrivon-Install.exe
         working-directory: installer

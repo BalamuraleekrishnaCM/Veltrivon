@@ -20,7 +20,18 @@ type Package struct {
 	Name    string `json:"name"`
 	ID      string `json:"id"`
 	Profile string `json:"profile"`
+	AlsoProfiles []string `json:"also_profiles"`
 	URL     string `json:"url"`
+}
+
+func (p Package) selected(pick, profile string) bool {
+	if pick == "1" { return true }
+	if p.Profile == "optional" || p.Profile == "manual" { return false }
+	if pick == "5" || p.Profile == profile { return true }
+	for _, additional := range p.AlsoProfiles {
+		if additional == profile { return true }
+	}
+	return false
 }
 
 func main() { os.Exit(run()) }
@@ -32,8 +43,8 @@ func run() int {
 		fmt.Println(err)
 		return 2
 	}
-	fmt.Println("VELTRIVON | Windows Control Suite | Utility installer\n1 Search catalog only\n2 Install essentials\n3 Install extended tools\n4 Install XR/media tools\n5 Install all three profiles\n6 Review optional/manual tools\n7 Exit")
-	pick := ask("Choose 1-7: ")
+	fmt.Println("VELTRIVON | Windows Control Suite | Utility installer\n1 Search catalog only\n2 Install essentials\n3 Install extended tools\n4 Install XR/media tools\n5 Install all installation profiles\n6 Review optional/manual tools\n7 Exit\n8 Install essential developer tools\n9 Install open-source-first XR tools")
+	pick := ask("Choose 1-9: ")
 	if pick == "7" { return 0 }
 	if pick == "6" {
 		for _, p := range pkgs {
@@ -42,7 +53,7 @@ func run() int {
 		ask("Press Enter to exit.")
 		return 0
 	}
-	profiles := map[string]string{"2": "essential", "3": "extended", "4": "xr"}
+	profiles := map[string]string{"2": "essential", "3": "extended", "4": "xr", "8": "developer", "9": "xr-open"}
 	if pick != "1" && pick != "5" && profiles[pick] == "" {
 		fmt.Println("Invalid selection")
 		return 2
@@ -53,7 +64,12 @@ func run() int {
 		ask("Press Enter to exit.")
 		return 2
 	}
-	if pick != "1" && !strings.EqualFold(ask("Install selected tools and accept package/source agreements? [y/N]: "), "y") { return 0 }
+	if pick != "1" {
+		for _, p := range pkgs {
+			if p.selected(pick, profiles[pick]) { fmt.Printf("%s [%s]\n", p.Name, p.ID) }
+		}
+		if !strings.EqualFold(ask("Install selected tools and accept package/source agreements? [y/N]: "), "y") { return 0 }
+	}
 	base := os.Getenv("LOCALAPPDATA")
 	if base == "" { base = os.TempDir() }
 	dir := filepath.Join(base, "Veltrivon", "Installer")
@@ -74,7 +90,7 @@ func run() int {
 	_, _ = call("source", "update", "--name", "winget")
 	ok, fail, manual := 0, 0, 0
 	for _, p := range pkgs {
-		if pick != "1" && (p.Profile == "manual" || p.Profile == "optional" || (pick != "5" && p.Profile != profiles[pick])) { continue }
+		if !p.selected(pick, profiles[pick]) { continue }
 		fmt.Fprintf(w, "\n[%s] %s\n", p.Profile, p.Name)
 		if p.ID == "" { fmt.Fprintln(w, "Manual:", p.URL); manual++; continue }
 		args := []string{"--id", p.ID, "--exact", "--source", "winget", "--accept-source-agreements"}

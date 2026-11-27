@@ -75,13 +75,19 @@
     "name": "Windows Terminal",
     "id": "Microsoft.WindowsTerminal",
     "profile": "essential",
-    "url": "https://github.com/microsoft/terminal"
+    "url": "https://github.com/microsoft/terminal",
+    "also_profiles": [
+      "developer"
+    ]
   },
   {
     "name": "PowerShell 7",
     "id": "Microsoft.PowerShell",
     "profile": "essential",
-    "url": "https://github.com/PowerShell/PowerShell"
+    "url": "https://github.com/PowerShell/PowerShell",
+    "also_profiles": [
+      "developer"
+    ]
   },
   {
     "name": "Bitwarden",
@@ -231,7 +237,8 @@
     "name": "RenderDoc",
     "id": "RenderDoc.RenderDoc",
     "profile": "xr",
-    "url": "https://renderdoc.org/"
+    "url": "https://renderdoc.org/",
+    "also_profiles": ["xr-open"]
   },
   {
     "name": "PIX",
@@ -243,13 +250,19 @@
     "name": "ADB Platform Tools",
     "id": "Google.PlatformTools",
     "profile": "xr",
-    "url": "https://developer.android.com/tools/releases/platform-tools"
+    "url": "https://developer.android.com/tools/releases/platform-tools",
+    "also_profiles": [
+      "xr-open"
+    ]
   },
   {
     "name": "scrcpy",
     "id": "Genymobile.scrcpy",
     "profile": "xr",
-    "url": "https://github.com/Genymobile/scrcpy"
+    "url": "https://github.com/Genymobile/scrcpy",
+    "also_profiles": [
+      "xr-open"
+    ]
   },
   {
     "name": "FFmpeg",
@@ -267,7 +280,10 @@
     "name": "OBS Studio",
     "id": "OBSProject.OBSStudio",
     "profile": "xr",
-    "url": "https://obsproject.com/"
+    "url": "https://obsproject.com/",
+    "also_profiles": [
+      "xr-open"
+    ]
   },
   {
     "name": "Apktool",
@@ -279,7 +295,11 @@
     "name": "Git",
     "id": "Git.Git",
     "profile": "xr",
-    "url": "https://git-scm.com/"
+    "url": "https://git-scm.com/",
+    "also_profiles": [
+      "developer",
+      "xr-open"
+    ]
   },
   {
     "name": "Microsoft Defender",
@@ -400,5 +420,95 @@
     "id": "",
     "profile": "manual",
     "url": "https://developers.meta.com/vr/resources/developer-tools/"
+  },
+  {
+    "url": "https://github.com/VSCodium/vscodium",
+    "profile": "developer",
+    "name": "VSCodium",
+    "id": "VSCodium.VSCodium"
+  },
+  {
+    "url": "https://go.dev/",
+    "profile": "developer",
+    "name": "Go",
+    "id": "GoLang.Go"
+  },
+  {
+    "url": "https://dotnet.microsoft.com/download/dotnet/10.0",
+    "profile": "developer",
+    "name": ".NET 10 SDK",
+    "id": "Microsoft.DotNet.SDK.10"
+  },
+  {
+    "url": "https://nodejs.org/",
+    "profile": "developer",
+    "name": "Node.js LTS",
+    "id": "OpenJS.NodeJS.LTS"
+  },
+  {
+    "url": "https://www.python.org/",
+    "profile": "developer",
+    "name": "Python 3.14",
+    "id": "Python.Python.3.14"
+  },
+  {
+    "url": "https://adoptium.net/",
+    "profile": "developer",
+    "name": "Eclipse Temurin 21 JDK",
+    "id": "EclipseAdoptium.Temurin.21.JDK"
+  },
+  {
+    "url": "https://cmake.org/",
+    "profile": "developer",
+    "name": "CMake",
+    "id": "Kitware.CMake"
+  },
+  {
+    "url": "https://ninja-build.org/",
+    "profile": "developer",
+    "name": "Ninja",
+    "id": "Ninja-build.Ninja"
+  },
+  {
+    "url": "https://llvm.org/",
+    "profile": "developer",
+    "name": "LLVM",
+    "id": "LLVM.LLVM"
+  },
+  {
+    "url": "https://cli.github.com/",
+    "profile": "developer",
+    "name": "GitHub CLI",
+    "id": "GitHub.cli"
+  },
+  {
+    "url": "https://github.com/BurntSushi/ripgrep",
+    "profile": "developer",
+    "name": "ripgrep",
+    "id": "BurntSushi.ripgrep.MSVC"
+  },
+  {
+    "url": "https://jqlang.org/",
+    "profile": "developer",
+    "name": "jq",
+    "id": "jqlang.jq"
+  },
+  {
+    "url": "https://godotengine.org/",
+    "profile": "xr-open",
+    "name": "Godot",
+    "id": "GodotEngine.GodotEngine"
+  },
+  {
+    "url": "https://www.blender.org/",
+    "profile": "xr-open",
+    "name": "Blender",
+    "id": "BlenderFoundation.Blender"
+  },
+  {
+    "url": "https://github.com/alvr-org/ALVR",
+    "profile": "manual",
+    "name": "ALVR",
+    "id": ""
   }
 ]
