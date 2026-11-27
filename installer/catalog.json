@@ -1,0 +1,404 @@
+[
+  {
+    "name": "Kudu",
+    "id": "AdventDevelopmentInc.Kudu",
+    "profile": "essential",
+    "url": "https://usekudu.com/download"
+  },
+  {
+    "name": "BCUninstaller",
+    "id": "Klocman.BulkCrapUninstaller",
+    "profile": "essential",
+    "url": "https://www.bcuninstaller.com/"
+  },
+  {
+    "name": "UniGetUI",
+    "id": "Devolutions.UniGetUI",
+    "profile": "essential",
+    "url": "https://github.com/Devolutions/UniGetUI"
+  },
+  {
+    "name": "Sysinternals Suite",
+    "id": "Microsoft.Sysinternals.Suite",
+    "profile": "essential",
+    "url": "https://learn.microsoft.com/sysinternals/downloads/sysinternals-suite"
+  },
+  {
+    "name": "System Informer",
+    "id": "WinsiderSS.SystemInformer",
+    "profile": "essential",
+    "url": "https://systeminformer.dev/downloads"
+  },
+  {
+    "name": "HWiNFO",
+    "id": "REALiX.HWiNFO",
+    "profile": "essential",
+    "url": "https://www.hwinfo.com/download/"
+  },
+  {
+    "name": "CrystalDiskInfo",
+    "id": "CrystalDewWorld.CrystalDiskInfo",
+    "profile": "essential",
+    "url": "https://crystalmark.info/"
+  },
+  {
+    "name": "Everything",
+    "id": "voidtools.Everything",
+    "profile": "essential",
+    "url": "https://www.voidtools.com/"
+  },
+  {
+    "name": "WizTree",
+    "id": "AntibodySoftware.WizTree",
+    "profile": "essential",
+    "url": "https://diskanalyzer.com/"
+  },
+  {
+    "name": "7-Zip",
+    "id": "7zip.7zip",
+    "profile": "essential",
+    "url": "https://www.7-zip.org/"
+  },
+  {
+    "name": "PowerToys",
+    "id": "Microsoft.PowerToys",
+    "profile": "essential",
+    "url": "https://github.com/microsoft/PowerToys"
+  },
+  {
+    "name": "DevToys",
+    "id": "DevToys-app.DevToys",
+    "profile": "essential",
+    "url": "https://devtoys.app/"
+  },
+  {
+    "name": "Windows Terminal",
+    "id": "Microsoft.WindowsTerminal",
+    "profile": "essential",
+    "url": "https://github.com/microsoft/terminal"
+  },
+  {
+    "name": "PowerShell 7",
+    "id": "Microsoft.PowerShell",
+    "profile": "essential",
+    "url": "https://github.com/PowerShell/PowerShell"
+  },
+  {
+    "name": "Bitwarden",
+    "id": "Bitwarden.Bitwarden",
+    "profile": "essential",
+    "url": "https://bitwarden.com/download/"
+  },
+  {
+    "name": "FreeFileSync",
+    "id": "FreeFileSync.FreeFileSync",
+    "profile": "extended",
+    "url": "https://freefilesync.org/"
+  },
+  {
+    "name": "OCCT",
+    "id": "OCBase.OCCT",
+    "profile": "extended",
+    "url": "https://www.ocbase.com/"
+  },
+  {
+    "name": "CrystalDiskMark",
+    "id": "CrystalDewWorld.CrystalDiskMark",
+    "profile": "extended",
+    "url": "https://crystalmark.info/"
+  },
+  {
+    "name": "CPU-Z",
+    "id": "CPUID.CPU-Z",
+    "profile": "extended",
+    "url": "https://www.cpuid.com/"
+  },
+  {
+    "name": "GPU-Z",
+    "id": "TechPowerUp.GPU-Z",
+    "profile": "extended",
+    "url": "https://www.techpowerup.com/gpuz/"
+  },
+  {
+    "name": "Czkawka",
+    "id": "qarmin.czkawka",
+    "profile": "extended",
+    "url": "https://github.com/qarmin/czkawka"
+  },
+  {
+    "name": "BleachBit",
+    "id": "BleachBit.BleachBit",
+    "profile": "extended",
+    "url": "https://www.bleachbit.org/"
+  },
+  {
+    "name": "Files",
+    "id": "FilesCommunity.Files",
+    "profile": "extended",
+    "url": "https://files.community/"
+  },
+  {
+    "name": "Double Commander",
+    "id": "DoubleCommander.DoubleCommander",
+    "profile": "extended",
+    "url": "https://doublecmd.sourceforge.io/"
+  },
+  {
+    "name": "Syncthing",
+    "id": "Syncthing.Syncthing",
+    "profile": "extended",
+    "url": "https://syncthing.net/"
+  },
+  {
+    "name": "Kopia",
+    "id": "Kopia.KopiaUI",
+    "profile": "extended",
+    "url": "https://kopia.io/"
+  },
+  {
+    "name": "Flow Launcher",
+    "id": "Flow-Launcher.Flow-Launcher",
+    "profile": "extended",
+    "url": "https://www.flowlauncher.com/"
+  },
+  {
+    "name": "AutoHotkey",
+    "id": "AutoHotkey.AutoHotkey",
+    "profile": "extended",
+    "url": "https://www.autohotkey.com/"
+  },
+  {
+    "name": "ShareX",
+    "id": "ShareX.ShareX",
+    "profile": "extended",
+    "url": "https://getsharex.com/"
+  },
+  {
+    "name": "ILSpy",
+    "id": "icsharpcode.ILSpy",
+    "profile": "extended",
+    "url": "https://github.com/icsharpcode/ILSpy"
+  },
+  {
+    "name": "dnSpyEx",
+    "id": "dnSpyEx.dnSpy",
+    "profile": "extended",
+    "url": "https://github.com/dnSpyEx/dnSpy"
+  },
+  {
+    "name": "HxD",
+    "id": "MHNexus.HxD",
+    "profile": "extended",
+    "url": "https://mh-nexus.de/en/hxd/"
+  },
+  {
+    "name": "WinMerge",
+    "id": "WinMerge.WinMerge",
+    "profile": "extended",
+    "url": "https://winmerge.org/"
+  },
+  {
+    "name": "Meld",
+    "id": "Meld.Meld",
+    "profile": "extended",
+    "url": "https://meldmerge.org/"
+  },
+  {
+    "name": "DBeaver",
+    "id": "dbeaver.dbeaver",
+    "profile": "extended",
+    "url": "https://dbeaver.io/"
+  },
+  {
+    "name": "Bruno",
+    "id": "Bruno.Bruno",
+    "profile": "extended",
+    "url": "https://www.usebruno.com/"
+  },
+  {
+    "name": "Wireshark",
+    "id": "WiresharkFoundation.Wireshark",
+    "profile": "extended",
+    "url": "https://www.wireshark.org/"
+  },
+  {
+    "name": "WinDbg",
+    "id": "Microsoft.WinDbg",
+    "profile": "extended",
+    "url": "https://learn.microsoft.com/windows-hardware/drivers/debugger/"
+  },
+  {
+    "name": "RenderDoc",
+    "id": "RenderDoc.RenderDoc",
+    "profile": "xr",
+    "url": "https://renderdoc.org/"
+  },
+  {
+    "name": "PIX",
+    "id": "Microsoft.PIX",
+    "profile": "xr",
+    "url": "https://devblogs.microsoft.com/pix/"
+  },
+  {
+    "name": "ADB Platform Tools",
+    "id": "Google.PlatformTools",
+    "profile": "xr",
+    "url": "https://developer.android.com/tools/releases/platform-tools"
+  },
+  {
+    "name": "scrcpy",
+    "id": "Genymobile.scrcpy",
+    "profile": "xr",
+    "url": "https://github.com/Genymobile/scrcpy"
+  },
+  {
+    "name": "FFmpeg",
+    "id": "Gyan.FFmpeg",
+    "profile": "xr",
+    "url": "https://ffmpeg.org/"
+  },
+  {
+    "name": "MediaInfo",
+    "id": "MediaArea.MediaInfo.GUI",
+    "profile": "xr",
+    "url": "https://mediaarea.net/en/MediaInfo"
+  },
+  {
+    "name": "OBS Studio",
+    "id": "OBSProject.OBSStudio",
+    "profile": "xr",
+    "url": "https://obsproject.com/"
+  },
+  {
+    "name": "Apktool",
+    "id": "iBotPeaches.Apktool",
+    "profile": "xr",
+    "url": "https://apktool.org/"
+  },
+  {
+    "name": "Git",
+    "id": "Git.Git",
+    "profile": "xr",
+    "url": "https://git-scm.com/"
+  },
+  {
+    "name": "Microsoft Defender",
+    "id": "",
+    "profile": "manual",
+    "url": "https://support.microsoft.com/windows/stay-protected-with-windows-security-2ae0363d-0ada-c064-8b56-6a39afb6a963"
+  },
+  {
+    "name": "Malwarebytes Free",
+    "id": "Malwarebytes.Malwarebytes",
+    "profile": "optional",
+    "url": "https://www.malwarebytes.com/"
+  },
+  {
+    "name": "Bitdefender Free",
+    "id": "",
+    "profile": "manual",
+    "url": "https://www.bitdefender.com/en-in/consumer/free-antivirus"
+  },
+  {
+    "name": "AdwCleaner",
+    "id": "Malwarebytes.AdwCleaner",
+    "profile": "optional",
+    "url": "https://www.malwarebytes.com/adwcleaner"
+  },
+  {
+    "name": "ESET Online Scanner",
+    "id": "",
+    "profile": "manual",
+    "url": "https://www.eset.com/in/home/online-scanner/"
+  },
+  {
+    "name": "Advanced SystemCare",
+    "id": "IObit.AdvancedSystemCare",
+    "profile": "optional",
+    "url": "https://www.iobit.com/en/advancedsystemcarefree.php"
+  },
+  {
+    "name": "Glary Utilities",
+    "id": "Glarysoft.GlaryUtilities",
+    "profile": "optional",
+    "url": "https://www.glarysoft.com/"
+  },
+  {
+    "name": "PrivaZer",
+    "id": "Goversoft.PrivaZer",
+    "profile": "optional",
+    "url": "https://privazer.com/"
+  },
+  {
+    "name": "Microsoft PC Manager",
+    "id": "Microsoft.PCManager",
+    "profile": "optional",
+    "url": "https://pcmanager.microsoft.com/"
+  },
+  {
+    "name": "Process Lasso",
+    "id": "Bitsum.ProcessLasso",
+    "profile": "optional",
+    "url": "https://bitsum.com/"
+  },
+  {
+    "name": "Fan Control",
+    "id": "Rem0o.FanControl",
+    "profile": "optional",
+    "url": "https://getfancontrol.com/"
+  },
+  {
+    "name": "Portmaster",
+    "id": "Safing.Portmaster",
+    "profile": "optional",
+    "url": "https://safing.io/"
+  },
+  {
+    "name": "Simplewall",
+    "id": "Henry++.simplewall",
+    "profile": "optional",
+    "url": "https://github.com/henrypp/simplewall"
+  },
+  {
+    "name": "VeraCrypt",
+    "id": "IDRIX.VeraCrypt",
+    "profile": "optional",
+    "url": "https://veracrypt.fr/"
+  },
+  {
+    "name": "Sandboxie Plus",
+    "id": "Sandboxie.Plus",
+    "profile": "optional",
+    "url": "https://sandboxie-plus.com/"
+  },
+  {
+    "name": "Windows Performance Toolkit",
+    "id": "",
+    "profile": "manual",
+    "url": "https://learn.microsoft.com/windows-hardware/test/wpt/"
+  },
+  {
+    "name": "GPUView",
+    "id": "",
+    "profile": "manual",
+    "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/display/using-gpuview"
+  },
+  {
+    "name": "NVIDIA Nsight",
+    "id": "",
+    "profile": "manual",
+    "url": "https://developer.nvidia.com/tools-downloads"
+  },
+  {
+    "name": "Meta Quest Developer Hub",
+    "id": "",
+    "profile": "manual",
+    "url": "https://developers.meta.com/vr/downloads/package/oculus-developer-hub-win/"
+  },
+  {
+    "name": "OVR Metrics Tool",
+    "id": "",
+    "profile": "manual",
+    "url": "https://developers.meta.com/vr/resources/developer-tools/"
+  }
+]

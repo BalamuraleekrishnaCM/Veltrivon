@@ -1,0 +1,20 @@
+name: Build
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet build src/Veltrivon.Core/Veltrivon.Core.csproj -c Release
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+      - run: go test ./...
+        working-directory: installer
+      - run: go build -trimpath -o Veltrivon-Install.exe .
+        working-directory: installer
