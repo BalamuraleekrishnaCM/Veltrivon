@@ -18,6 +18,7 @@ internal sealed record Diagnostic(string Name, string Description, string Comman
 
 internal static class ToolOperations
 {
+    internal const int NoInstalledPackage = unchecked((int)0x8A150014);
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     internal static readonly string LogFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Veltrivon", "Jobs");
@@ -53,6 +54,23 @@ internal static class ToolOperations
             "Get-CimInstance Win32_StartupCommand | Select-Object Name, Location, Command | Format-List | Out-String -Width 160")
     ];
 
+    internal static readonly Diagnostic[] SecurityChecks =
+    [
+        new("Microsoft Defender", "Antivirus, real-time protection, and security intelligence status",
+            """
+            Get-MpComputerStatus |
+                Select-Object AMRunningMode, AntivirusEnabled, RealTimeProtectionEnabled,
+                    AntivirusSignatureAge, AntivirusSignatureLastUpdated |
+                Format-List | Out-String
+            """),
+        new("Windows Firewall", "Firewall status for domain, private, and public networks",
+            "Get-NetFirewallProfile -PolicyStore ActiveStore | Select-Object Name, Enabled, DefaultInboundAction | Format-Table -AutoSize | Out-String"),
+        new("Drive encryption", "BitLocker protection and encryption status",
+            "Get-BitLockerVolume | Select-Object MountPoint, ProtectionStatus, VolumeStatus, EncryptionPercentage | Format-Table -AutoSize | Out-String"),
+        new("Secure Boot", "UEFI Secure Boot status",
+            "if (Confirm-SecureBootUEFI) { 'Secure Boot is enabled.' } else { 'Secure Boot is disabled.' }")
+    ];
+
     internal static CatalogTool[] LoadCatalog()
     {
         using var stream = typeof(ToolOperations).Assembly.GetManifestResourceStream("Veltrivon.Catalog.json")
@@ -80,12 +98,18 @@ internal static class ToolOperations
         if (action == "install")
             arguments.Add("--accept-package-agreements");
 
+        return RunWinGetAsync(arguments, output);
+    }
+
+    internal static Task<OperationResult> RunWinGetAsync(IEnumerable<string> arguments, Action<string> output,
+        CancellationToken cancellationToken = default)
+    {
         var winget = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Microsoft", "WindowsApps", "winget.exe");
         if (!File.Exists(winget))
             throw new InvalidOperationException("Enable the WinGet app execution alias or install Microsoft App Installer.");
 
-        return RunAsync(winget, arguments, output);
+        return RunAsync(winget, arguments, output, cancellationToken);
     }
 
     internal static async Task<StartApp[]> StartAppsAsync()
@@ -97,6 +121,37 @@ internal static class ToolOperations
         if (!result.Succeeded)
             throw new InvalidOperationException("Windows could not read the Start menu app list.");
         return JsonSerializer.Deserialize<StartApp[]>(json.ToString(), JsonOptions) ?? [];
+    }
+
+    internal static (string Path, string Argument)? FindToolTest(string id)
+    {
+        var (executable, argument) = id switch
+        {
+            "Git.Git" => ("git.exe", "--version"),
+            "GoLang.Go" => ("go.exe", "version"),
+            "Microsoft.DotNet.SDK.10" => ("dotnet.exe", "--list-sdks"),
+            "OpenJS.NodeJS.LTS" => ("node.exe", "--version"),
+            "Kitware.CMake" => ("cmake.exe", "--version"),
+            "Ninja-build.Ninja" => ("ninja.exe", "--version"),
+            "Google.PlatformTools" => ("adb.exe", "version"),
+            "Genymobile.scrcpy" => ("scrcpy.exe", "--version"),
+            "astral-sh.uv" => ("uv.exe", "--version"),
+            "Oven-sh.Bun" => ("bun.exe", "--version"),
+            _ => ("", "")
+        };
+        if (executable.Length == 0) return null;
+
+        var links = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Microsoft", "WinGet", "Links");
+        var candidates = (Environment.GetEnvironmentVariable("PATH") ?? "")
+            .Split(Path.PathSeparator).Prepend(links);
+        foreach (var entry in candidates)
+        {
+            var directory = entry.Trim('"');
+            if (Path.IsPathFullyQualified(directory) && File.Exists(Path.Combine(directory, executable)))
+                return (Path.Combine(directory, executable), argument);
+        }
+        return null;
     }
 
     internal static void Open(string path, params string[] arguments)

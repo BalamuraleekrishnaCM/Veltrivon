@@ -4,12 +4,17 @@
     xmlns:local="using:Veltrivon.App"
     Title="Veltrivon · Windows Control Suite">
     <NavigationView x:Name="Navigation" IsBackButtonVisible="Collapsed"
-        IsSettingsVisible="False" PaneTitle="Veltrivon" PaneDisplayMode="Left"
-        OpenPaneLength="212" SelectionChanged="Navigate">
+        IsSettingsVisible="False" PaneTitle="Veltrivon" PaneDisplayMode="Auto"
+        OpenPaneLength="208" SelectionChanged="Navigate">
         <NavigationView.MenuItems>
+            <NavigationViewItem x:Name="OverviewNav" Content="Overview" Icon="Home" Tag="overview" />
             <NavigationViewItem x:Name="ToolNav" Content="Tool catalog" Icon="AllApps" Tag="tools" />
+            <NavigationViewItem x:Name="UpdatesNav" Content="Software updates" Icon="Refresh" Tag="updates" />
+            <NavigationViewItem Content="Security checks" Tag="security">
+                <NavigationViewItem.Icon><FontIcon Glyph="&#xEA18;" /></NavigationViewItem.Icon>
+            </NavigationViewItem>
             <NavigationViewItem Content="Diagnostics" Icon="Repair" Tag="diagnostics" />
-            <NavigationViewItem Content="Activity" Icon="Document" Tag="activity" />
+            <NavigationViewItem x:Name="ActivityNav" Content="Activity" Icon="Document" Tag="activity" />
         </NavigationView.MenuItems>
         <Grid x:Name="Root" Padding="28,20,28,24" RowSpacing="14">
             <Grid.RowDefinitions>
@@ -22,7 +27,34 @@
                 <TextBlock x:Name="Description" TextWrapping="Wrap"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
-            <Grid x:Name="CatalogView" Grid.Row="1" RowSpacing="12">
+            <ScrollViewer x:Name="OverviewView" Grid.Row="1" Visibility="Collapsed">
+                <StackPanel Spacing="16">
+                    <Border CornerRadius="12" Padding="24" Background="{ThemeResource AccentFillColorDefaultBrush}">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="Workstation health" FontSize="26" FontWeight="SemiBold"
+                                Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                            <TextBlock Text="Review Windows protection, available app updates, and system diagnostics in one scan."
+                                TextWrapping="Wrap" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                            <Button x:Name="OverviewScan" Content="Run workstation check" Click="CheckWorkstation" />
+                        </StackPanel>
+                    </Border>
+                    <Border CornerRadius="12" Padding="20" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="Software and tools" FontSize="20" FontWeight="SemiBold" />
+                            <TextBlock Text="Browse developer tools, verify installations, and see available updates."
+                                TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button Content="Browse tools" Click="GoToTools" />
+                                <Button Content="Software updates" Click="GoToUpdates" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock x:Name="LastOverviewScan" Text="No workstation checks run in this session."
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+            </ScrollViewer>
+            <Grid x:Name="CatalogView" Grid.Row="1" RowSpacing="12" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -63,6 +95,7 @@
                     <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled"><StackPanel Orientation="Horizontal">
                         <Button x:Name="SelectVisible" Content="Select visible" Click="SelectTools" Margin="0,0,8,8" />
                         <Button x:Name="Check" Content="Check WinGet" Click="CheckPackages" Margin="0,0,8,8" />
+                        <Button x:Name="Test" Content="Test selected" Click="TestPackages" Margin="0,0,8,8" />
                         <Button x:Name="Install" Content="Install selected" Click="InstallPackages"
                             Style="{StaticResource AccentButtonStyle}" Margin="0,0,8,8" />
                         <Button x:Name="Launch" Content="Run tool" Click="LaunchTool" Margin="0,0,8,8" />
@@ -70,6 +103,18 @@
                     </StackPanel></ScrollViewer>
                 </StackPanel>
             </Grid>
+            <ScrollViewer x:Name="UpdatesView" Grid.Row="1" Visibility="Collapsed">
+                <StackPanel Spacing="12">
+                    <Button x:Name="CheckUpdates" Content="Check for updates" Click="CheckSoftwareUpdates"
+                        Style="{StaticResource AccentButtonStyle}" />
+                    <TextBlock Text="Checks apps WinGet recognizes across configured sources. Review the results in Activity." TextWrapping="Wrap" />
+                    <Button x:Name="ListSoftware" Content="List installed software" Click="ListInstalledSoftware" />
+                    <Button x:Name="RefreshSources" Content="Refresh WinGet sources" Click="RefreshPackageSources" />
+                </StackPanel>
+            </ScrollViewer>
+            <ScrollViewer x:Name="SecurityView" Grid.Row="1" Visibility="Collapsed">
+                <StackPanel x:Name="SecurityCards" Spacing="12" />
+            </ScrollViewer>
             <ScrollViewer x:Name="DiagnosticsView" Grid.Row="1" Visibility="Collapsed">
                 <StackPanel x:Name="DiagnosticCards" Spacing="12" />
             </ScrollViewer>

@@ -18,25 +18,43 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1120, 780));
-        AddDiagnostics();
+        AddChecks(DiagnosticCards, "Run all diagnostics", "Diagnostics", ToolOperations.Diagnostics);
+        AddChecks(SecurityCards, "Run security checks", "Security checks", ToolOperations.SecurityChecks);
         Profile.SelectedIndex = 0;
-        Navigation.SelectedItem = ToolNav;
+        Navigation.SelectedItem = OverviewNav;
         ready = true;
         ApplyFilter();
     }
 
     private void Navigate(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        var view = (args.SelectedItem as NavigationViewItem)?.Tag as string ?? "tools";
+        var view = (args.SelectedItem as NavigationViewItem)?.Tag as string ?? "overview";
+        OverviewView.Visibility = view == "overview" ? Visibility.Visible : Visibility.Collapsed;
         CatalogView.Visibility = view == "tools" ? Visibility.Visible : Visibility.Collapsed;
+        UpdatesView.Visibility = view == "updates" ? Visibility.Visible : Visibility.Collapsed;
+        SecurityView.Visibility = view == "security" ? Visibility.Visible : Visibility.Collapsed;
         DiagnosticsView.Visibility = view == "diagnostics" ? Visibility.Visible : Visibility.Collapsed;
         ActivityView.Visibility = view == "activity" ? Visibility.Visible : Visibility.Collapsed;
         (Heading.Text, Description.Text) = view switch
         {
+            "overview" => ("Overview", "Manage and check this Windows workstation."),
+            "updates" => ("Software updates", "Check available updates or review your installed apps."),
+            "security" => ("Security checks", "Inspect Windows protection, firewall, drive encryption, and Secure Boot."),
             "diagnostics" => ("Diagnostics", "Inspect workstation inventory, disk health, system errors, and startup entries."),
             "activity" => ("Activity", "View operation results and open saved logs."),
             _ => ("Tool catalog", "Find, install, and open workstation, developer, and XR tools.")
         };
+    }
+
+    private void GoToTools(object sender, RoutedEventArgs args) => Navigation.SelectedItem = ToolNav;
+
+    private void GoToUpdates(object sender, RoutedEventArgs args) => Navigation.SelectedItem = UpdatesNav;
+
+    private async void CheckWorkstation(object sender, RoutedEventArgs args)
+    {
+        if (busy) return;
+        await RunDiagnosticsAsync("Workstation check", [.. ToolOperations.SecurityChecks, .. ToolOperations.Diagnostics], checkUpdates: true);
+        LastOverviewScan.Text = $"Last workstation check attempt · {DateTime.Now:g}";
     }
 
     private void FilterChanged(object sender, RoutedEventArgs args)
@@ -70,10 +88,12 @@ public sealed partial class MainWindow : Window
             Selection.Text += " · Publisher download";
         SelectVisible.IsEnabled = !busy && Tools.Items.Count > 0;
         Check.IsEnabled = !busy && selected.Any(tool => !string.IsNullOrWhiteSpace(tool.Id));
+        Test.IsEnabled = Check.IsEnabled;
         Install.IsEnabled = !busy && selected.Any(tool => tool.CanInstall);
         Launch.IsEnabled = !busy && selected.Length == 1;
         Website.IsEnabled = !busy && selected.Length == 1;
-        foreach (var card in DiagnosticCards.Children.OfType<StackPanel>())
+        OverviewScan.IsEnabled = CheckUpdates.IsEnabled = ListSoftware.IsEnabled = RefreshSources.IsEnabled = !busy;
+        foreach (var card in DiagnosticCards.Children.Concat(SecurityCards.Children).OfType<StackPanel>())
             foreach (var button in card.Children.OfType<Button>())
                 button.IsEnabled = !busy;
     }
@@ -85,6 +105,65 @@ public sealed partial class MainWindow : Window
         var selected = SelectedTools().Where(tool => !string.IsNullOrWhiteSpace(tool.Id)).ToArray();
         await RunPackagesAsync(selected, false);
     }
+
+    private async void TestPackages(object sender, RoutedEventArgs args)
+    {
+        var selected = SelectedTools().Where(tool => !string.IsNullOrWhiteSpace(tool.Id)).ToArray();
+        await RunJobAsync("Testing tool installations", async output =>
+        {
+            var found = 0;
+            var commandTests = 0;
+            var passedTests = 0;
+            foreach (var tool in selected)
+            {
+                Status.Text = $"Checking the installation for {tool.Name}…";
+                output(tool.Name);
+                var result = await ToolOperations.QueryPackageAsync("list", tool.Id!, output);
+                if (result.Succeeded) found++;
+                output(result.ExitCode == ToolOperations.NoInstalledPackage ? "No matching installation found." : result.Summary);
+                if (!result.Succeeded || ToolOperations.FindToolTest(tool.Id!) is not { } test) continue;
+                commandTests++;
+                try
+                {
+                    using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+                    var tested = await ToolOperations.RunAsync(test.Path, [test.Argument], output, timeout.Token);
+                    if (tested.Succeeded) passedTests++;
+                    output($"Executable test: {tested.Summary}");
+                }
+                catch (OperationCanceledException)
+                {
+                    output("Executable test timed out.");
+                }
+                catch (Win32Exception error)
+                {
+                    output($"Executable test could not run. {error.Message}");
+                }
+            }
+            var summary = $"WinGet identified {found} of {selected.Length} selected installations.";
+            return commandTests == 0 ? summary : $"{summary} {passedTests} of {commandTests} executable tests passed.";
+        });
+    }
+
+    private async void CheckSoftwareUpdates(object sender, RoutedEventArgs args) =>
+        await RunWinGetJobAsync("Checking software updates", ["list", "--upgrade-available"]);
+
+    private async void ListInstalledSoftware(object sender, RoutedEventArgs args) =>
+        await RunWinGetJobAsync("Listing installed software", ["list"]);
+
+    private async void RefreshPackageSources(object sender, RoutedEventArgs args) =>
+        await RunWinGetJobAsync("Refreshing WinGet sources", ["source", "update"], acceptSourceAgreements: false);
+
+    private Task RunWinGetJobAsync(string title, string[] arguments, bool acceptSourceAgreements = true) => RunJobAsync(title, async output =>
+    {
+        var flags = acceptSourceAgreements
+            ? new[] { "--accept-source-agreements", "--disable-interactivity" }
+            : new[] { "--disable-interactivity" };
+        var result = await ToolOperations.RunWinGetAsync([.. arguments, .. flags], output);
+        return WinGetSummary(result.ExitCode, result.Summary, arguments.Contains("--upgrade-available"));
+    });
+
+    private static string WinGetSummary(int? exitCode, string summary, bool checkingUpdates) =>
+        checkingUpdates && exitCode == ToolOperations.NoInstalledPackage ? "WinGet reported no available updates." : summary;
 
     private async void InstallPackages(object sender, RoutedEventArgs args)
     {
@@ -132,7 +211,7 @@ public sealed partial class MainWindow : Window
                     }
 
                     // WinGet's no-installed-package result permits proceeding to install.
-                    if (installed.ExitCode != unchecked((int)0x8A150014))
+                    if (installed.ExitCode != ToolOperations.NoInstalledPackage)
                     {
                         output($"Installed status unavailable. {installed.Summary}");
                         continue;
@@ -245,15 +324,15 @@ public sealed partial class MainWindow : Window
         catch (Win32Exception error) { Status.Text = error.Message; }
     }
 
-    private void AddDiagnostics()
+    private void AddChecks(StackPanel cards, string buttonTitle, string jobTitle, Diagnostic[] checks)
     {
         var scanPanel = new StackPanel { Spacing = 6 };
-        var scanButton = new Button { Content = "Run smart scan" };
-        scanButton.Click += async (_, _) => await RunDiagnosticsAsync("Smart scan", ToolOperations.Diagnostics);
+        var scanButton = new Button { Content = buttonTitle };
+        scanButton.Click += async (_, _) => await RunDiagnosticsAsync(jobTitle, checks);
         scanPanel.Children.Add(scanButton);
-        DiagnosticCards.Children.Add(scanPanel);
+        cards.Children.Add(scanPanel);
 
-        foreach (var diagnostic in ToolOperations.Diagnostics)
+        foreach (var diagnostic in checks)
         {
             var panel = new StackPanel { Spacing = 6 };
             panel.Children.Add(new TextBlock { Text = diagnostic.Name, FontSize = 20 });
@@ -261,11 +340,11 @@ public sealed partial class MainWindow : Window
             var button = new Button { Content = $"Run {diagnostic.Name.ToLowerInvariant()}" };
             button.Click += async (_, _) => await RunDiagnosticsAsync(diagnostic.Name, [diagnostic]);
             panel.Children.Add(button);
-            DiagnosticCards.Children.Add(panel);
+            cards.Children.Add(panel);
         }
     }
 
-    private async Task RunDiagnosticsAsync(string title, Diagnostic[] diagnostics)
+    private async Task RunDiagnosticsAsync(string title, Diagnostic[] diagnostics, bool checkUpdates = false)
     {
         if (busy) return;
         using var cancellation = new CancellationTokenSource();
@@ -289,7 +368,26 @@ public sealed partial class MainWindow : Window
                     output(result.Summary);
                     report.Add($"{diagnostic.Name}: {result.Summary}");
                 }
-                var summary = $"{completed} of {diagnostics.Length} checks completed successfully.";
+                if (checkUpdates)
+                {
+                    Status.Text = "Checking software updates…";
+                    output("Software updates");
+                    try
+                    {
+                        var result = await ToolOperations.RunWinGetAsync(
+                            ["list", "--upgrade-available", "--accept-source-agreements", "--disable-interactivity"],
+                            output, cancellation.Token);
+                        if (result.Succeeded || result.ExitCode == ToolOperations.NoInstalledPackage) completed++;
+                        report.Add($"Software updates: {WinGetSummary(result.ExitCode, result.Summary, true)}");
+                    }
+                    catch (Exception error) when (error is Win32Exception or InvalidOperationException)
+                    {
+                        report.Add($"Software updates: {error.Message}");
+                        output(error.Message);
+                    }
+                }
+                var count = diagnostics.Length + (checkUpdates ? 1 : 0);
+                var summary = $"{completed} of {count} checks ran. Review the findings in Activity.";
                 report.Add(summary);
                 return summary;
             }, report);
@@ -335,7 +433,7 @@ public sealed partial class MainWindow : Window
     {
         if (busy) return;
         SetBusy(true);
-        Navigation.SelectedItem = Navigation.MenuItems[2];
+        Navigation.SelectedItem = ActivityNav;
         Activity.Text = title + Environment.NewLine;
         Status.Text = title + "…";
         ScrollViewer.SetVerticalScrollBarVisibility(Activity, ScrollBarVisibility.Auto);

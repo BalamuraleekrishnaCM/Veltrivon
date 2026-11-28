@@ -1,5 +1,7 @@
 # Veltrivon Windows preview
 
+This preview adds a workstation overview, read-only checks for Defender, Firewall, BitLocker, and Secure Boot, and a WinGet view for installed software and available updates. **Test selected** verifies tool installations and checks versions for supported command-line tools. The developer profile adds Neovim, fzf, uv, fd, bat, and Bun.
+
 | Download | Contents |
 | --- | --- |
 | `Veltrivon-Setup-win-x64.exe` | Per-user setup with Start menu entries and an uninstaller. Includes the desktop app, XR Dev Manager, and the developer tool installer. |
