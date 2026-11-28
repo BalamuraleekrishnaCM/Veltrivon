@@ -1,0 +1,57 @@
+name: Windows release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - release/version.txt
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-2025
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+          cache-dependency-path: installer/go.mod
+      - name: Install Inno Setup compiler
+        run: choco install innosetup --yes --no-progress
+      - name: Build and verify Windows packages
+        run: ./release/Build-WindowsRelease.ps1
+      - name: Publish prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $tag = (Get-Content release/version.txt -Raw).Trim()
+          $assets = @(Get-ChildItem artifacts/release/$tag/assets -File | ForEach-Object FullName)
+          if ($assets.Count -ne 6) { throw "Expected six release assets." }
+          $existing = gh release view $tag --json isDraft,targetCommitish 2>$null
+          if ($LASTEXITCODE -eq 0) {
+              $draft = $existing | ConvertFrom-Json
+              if (!$draft.isDraft -or $draft.targetCommitish -ne $env:GITHUB_SHA) {
+                  throw "Release $tag already exists. Use a new version or resolve the existing draft."
+              }
+              gh release upload $tag @assets --clobber
+          } else {
+              gh release create $tag @assets --target $env:GITHUB_SHA --draft --prerelease --title "Veltrivon $tag" --notes-file release/notes.md
+          }
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          gh release edit $tag --draft=false
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
